@@ -7,12 +7,29 @@ import OperationButton from "./components/OperationButton";
 import ScreenComponent from "./components/ScreenComponent";
 
 function reducer(state, { type, payload }) {
+	console.log(state);
 	switch (type) {
 		case ACTIONS.ADD_DIGIT:
+			if (payload.content === "0" && state.firstV === "0") return state;
+			if (payload.content === "." && state.firstV.includes(".")) return state;
 			return {
 				...state,
-				firstV: `${payload.content}`,
+				firstV: `${state.firstV || ""}${payload.content}`,
 			};
+		case ACTIONS.CLEAR:
+			return {};
+		case ACTIONS.CHOOSE_OPERATION:
+			if (state.firstV === null && state.secondV === null) {
+				return state;
+			}
+			if (state.secondV === null) {
+				return {
+					...state,
+					operation: payload.operation,
+					secondV: state.firstV,
+					firstV: null,
+				};
+			}
 	}
 }
 
@@ -30,7 +47,11 @@ function App() {
 			<div className="ButtonPanel min-w-[300px] flex flex-col w-full h-2/3 bg-[#18212A]">
 				<section className="firstRow w-full h-1/5 flex items-center justify-evenly p-0 m-0">
 					<OperationButton operation={"AC"} dispatch={dispatch} />
-					<OperationButton operation={"DEL"} dispatch={dispatch} />
+					<OperationButton
+						operation={"DEL"}
+						dispatch={() => dispatch({ type: ACTIONS.CLEAR })}
+					/>
+
 					<OperationButton operation={"%"} dispatch={dispatch} />
 					<OperationButton operation={"/"} dispatch={dispatch} />
 				</section>

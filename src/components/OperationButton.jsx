@@ -5,7 +5,10 @@ export default function OperationButton({ operation, dispatch }) {
 	return (
 		<button
 			onClick={() =>
-				dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: { operation } })
+				dispatch({
+					type: ACTIONS.CHOOSE_OPERATION || ACTIONS.CLEAR,
+					payload: { operation },
+				})
 			}
 			className="bg-[#b6b6b6] text-[#18212A] rounded-full w-12 h-fit  flex justify-center items-center  p-2 hover:bg-[#e2dfdf]"
 		>
